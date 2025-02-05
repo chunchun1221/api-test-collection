@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "4e4e3b52-b88e-4839-8eb3-f1446975977b",
+		"name": "接口关联",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20096986"
+	},
+	"item": [
+		{
+			"name": "getRegionProvince（XML数据）",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('响应码',function(){\r",
+							"    pm.expect(pm.response.code).to.eql(200)\r",
+							"})\r",
+							"pm.test('响应内容',function(){\r",
+							"    pm.expect(pm.response.text()).to.include('广东')\r",
+							"})\r",
+							"pm.test('响应时间',function(){\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{weater}}/WeatherWS.asmx/getRegionProvince?",
+					"host": [
+						"{{weater}}"
+					],
+					"path": [
+						"WeatherWS.asmx",
+						"getRegionProvince"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSupportCityString（XML）",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//设置环境变量\r",
+							"var jsonObject = xml2Json(responseBody);\r",
+							"var code = jsonObject.ArrayOfString && jsonObject.ArrayOfString.string && jsonObject.ArrayOfString.string[0].split(',')[1];\r",
+							"pm.test('get one CityCode',function(){\r",
+							"    pm.expect(code).to.eql(\"2355\")\r",
+							"})\r",
+							"// tests['get one CityCode'] = code === '2355';\r",
+							"pm.environment.set('CityCode', code);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "theRegionCode",
+							"value": "31124",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{weater}}/WeatherWS.asmx/getSupportCityString",
+					"host": [
+						"{{weater}}"
+					],
+					"path": [
+						"WeatherWS.asmx",
+						"getSupportCityString"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWeather",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "theCityCode",
+							"value": "{{CityCode}}",
+							"type": "text"
+						},
+						{
+							"key": "theUserID",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{weater}}/WeatherWS.asmx/getWeather",
+					"host": [
+						"{{weater}}"
+					],
+					"path": [
+						"WeatherWS.asmx",
+						"getWeather"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "weater",
+			"value": "http://ws.webxml.com.cn/WebServices",
+			"type": "string"
+		}
+	]
+}
